@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Indian Defence System - 100 Queries (MOD 20)</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            background-color: darkgreen;
+            color: white;
+            padding: 15px;
+        }
+
+        .button-container {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 5px;
+            margin: 20px;
+        }
+
+        button {
+            padding: 6px;
+            background-color: navy;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        button:hover {
+            background-color: darkred;
+        }
+
+        table {
+            margin: 20px auto;
+            border-collapse: collapse;
+            width: 95%;
+            background-color: white;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 6px;
+        }
+
+        th {
+            background-color: lightgray;
+        }
+
+        #questionDisplay {
+            margin: 15px;
+            font-weight: bold;
+            color: darkgreen;
+        }
+
+        #queryDisplay {
+            margin: 10px;
+            font-weight: bold;
+            color: darkblue;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- LOGIN PAGE -->
+
+<div id="loginPage">
+
+<h2>Admin Login</h2>
+
+<input type="text" id="adminId" placeholder="Enter Admin ID"><br><br>
+
+<input type="password" id="adminPassword" placeholder="Enter Password"><br><br>
+
+<button onclick="adminLogin()">Login</button>
+
+<p id="loginMessage" style="color:red;"></p>
+
+</div>
+
+
+<!-- MAIN SYSTEM -->
+
+<div id="mainSystem" style="display:none;">
+
+<h1>Indian Defence System - 100 SQL Queries</h1>
+
+<div class="button-container" id="buttons"></div>
+
+<div id="questionDisplay"></div>
+<div id="queryDisplay"></div>
+<div id="output"></div>
+
+</div>
+
+<script>
+
+/* LOGIN FUNCTION */
+
+function adminLogin(){
+
+let id=document.getElementById("adminId").value;
+let pass=document.getElementById("adminPassword").value;
+
+if(id==="admin" && pass==="1234"){
+
+document.getElementById("loginPage").style.display="none";
+document.getElementById("mainSystem").style.display="block";
+
+}else{
+
+document.getElementById("loginMessage").innerText="Invalid Login";
+
+}
+
+}
+// Simulated Database
+const database = [
+    { id: 1, name: "Rahul", rank: "Captain", force: "Army", salary: 50000, age: 30 },
+    { id: 2, name: "Arjun", rank: "Major", force: "Navy", salary: 70000, age: 35 },
+    { id: 3, name: "Vikram", rank: "Colonel", force: "Air Force", salary: 90000, age: 42 },
+    { id: 4, name: "Kiran", rank: "Lieutenant", force: "Army", salary: 40000, age: 25 },
+    { id: 5, name: "Rohit", rank: "Commander", force: "Navy", salary: 80000, age: 38 }
+];
+
+// Create 100 buttons
+for (let i = 1; i <= 100; i++) {
+    let btn = document.createElement("button");
+    btn.innerText = "Query " + i;
+    btn.onclick = function() {
+        executeQuery(i);
+    };
+    document.getElementById("buttons").appendChild(btn);
+}
+function executeQuery(queryNumber){
+
+let mod=queryNumber%100;
+if(mod===0) mod=100;
+
+let question="";
+let sql="";
+let result=[];
+
+switch(mod){
+
+case 1:
+question="Display all soldiers";
+sql="SELECT * FROM soldiers";
+result=database;
+break;
+
+case 2:
+question="Display soldier names";
+sql="SELECT name FROM soldiers";
+result=database.map(r=>({name:r.name}));
+break;
+
+case 3:
+question="Army soldiers";
+sql="SELECT * FROM soldiers WHERE force='Army'";
+result=database.filter(r=>r.force==="Army");
+break;
+
+case 4:
+question="Navy soldiers";
+sql="SELECT * FROM soldiers WHERE force='Navy'";
+result=database.filter(r=>r.force==="Navy");
+break;
+
+case 5:
+question="Air Force soldiers";
+sql="SELECT * FROM soldiers WHERE force='Air Force'";
+result=database.filter(r=>r.force==="Air Force");
+break;
+
+case 6:
+question="Salary > 60000";
+sql="SELECT * FROM soldiers WHERE salary>60000";
+result=database.filter(r=>r.salary>60000);
+break;
+
+case 7:
+question="Age < 35";
+sql="SELECT * FROM soldiers WHERE age<35";
+result=database.filter(r=>r.age<35);
+break;
+
+case 8:
+question="Sort by salary ASC";
+sql="SELECT * FROM soldiers ORDER BY salary ASC";
+result=[...database].sort((a,b)=>a.salary-b.salary);
+break;
+
+case 9:
+question="Sort by age DESC";
+sql="SELECT * FROM soldiers ORDER BY age DESC";
+result=[...database].sort((a,b)=>b.age-a.age);
+break;
+
+case 10:
+question="Count soldiers";
+sql="SELECT COUNT(*) FROM soldiers";
+result=[{Total:database.length}];
+break;
+
+case 11:
+question="Max salary";
+sql="SELECT MAX(salary)";
+result=[{Max:Math.max(...database.map(r=>r.salary))}];
+break;
+
+case 12:
+question="Min salary";
+sql="SELECT MIN(salary)";
+result=[{Min:Math.min(...database.map(r=>r.salary))}];
+break;
+
+case 13:
+question="Average salary";
+sql="SELECT AVG(salary)";
+result=[{Avg:database.reduce((s,r)=>s+r.salary,0)/database.length}];
+break;
+
+case 14:
+question="Soldiers age >30";
+sql="SELECT * WHERE age>30";
+result=database.filter(r=>r.age>30);
+break;
+
+case 15:
+question="Captain rank";
+sql="SELECT * WHERE rank='Captain'";
+result=database.filter(r=>r.rank==="Captain");
+break;
+
+case 16:
+question="Salary BETWEEN 50000 AND 80000";
+sql="SELECT * WHERE salary BETWEEN 50000 AND 80000";
+result=database.filter(r=>r.salary>=50000 && r.salary<=80000);
+break;
+
+case 17:
+question="Age BETWEEN 25 AND 40";
+sql="SELECT * WHERE age BETWEEN 25 AND 40";
+result=database.filter(r=>r.age>=25 && r.age<=40);
+break;
+
+case 18:
+question="Name LIKE 'R%'";
+sql="SELECT * WHERE name LIKE 'R%'";
+result=database.filter(r=>r.name.startsWith("R"));
+break;
+
+case 19:
+question="Name length";
+sql="SELECT LENGTH(name)";
+result=database.map(r=>({name:r.name,length:r.name.length}));
+break;
+
+case 20:
+question="Uppercase names";
+sql="SELECT UPPER(name)";
+result=database.map(r=>({upper:r.name.toUpperCase()}));
+break;
+
+case 21:
+question="Lowercase names";
+sql="SELECT LOWER(name)";
+result=database.map(r=>({lower:r.name.toLowerCase()}));
+break;
+
+case 22:
+question="Round salary /1000";
+sql="SELECT ROUND(salary/1000)";
+result=database.map(r=>({rounded:Math.round(r.salary/1000)}));
+break;
+
+case 23:
+question="Square of age";
+sql="SELECT POWER(age,2)";
+result=database.map(r=>({name:r.name,square:Math.pow(r.age,2)}));
+break;
+
+case 24:
+question="Age mod 5";
+sql="SELECT MOD(age,5)";
+result=database.map(r=>({name:r.name,mod:r.age%5}));
+break;
+
+case 25:
+question="Absolute salary difference";
+sql="SELECT ABS(salary-60000)";
+result=database.map(r=>({name:r.name,diff:Math.abs(r.salary-60000)}));
+break;
+
+case 26:
+question="Distinct forces";
+sql="SELECT DISTINCT force";
+result=[...new Set(database.map(r=>r.force))].map(v=>({force:v}));
+break;
+
+case 27:
+question="Name contains 'a'";
+sql="LIKE '%a%'";
+result=database.filter(r=>r.name.toLowerCase().includes("a"));
+break;
+
+case 28:
+question="Age IN (30,35)";
+sql="WHERE age IN (30,35)";
+result=database.filter(r=>[30,35].includes(r.age));
+break;
+
+case 29:
+question="Age NOT IN (30,35)";
+sql="WHERE age NOT IN (30,35)";
+result=database.filter(r=>![30,35].includes(r.age));
+break;
+
+case 30:
+question="Salary > ALL salaries";
+sql="> ALL(subquery)";
+let max=Math.max(...database.map(r=>r.salary));
+result=database.filter(r=>r.salary>=max);
+break;
+
+case 31:
+question="Salary > ANY 60000";
+sql="> ANY(60000)";
+result=database.filter(r=>r.salary>60000);
+break;
+
+case 32:
+question="EXISTS Army soldiers";
+sql="EXISTS";
+result=[{Exists:database.some(r=>r.force==="Army")}];
+break;
+
+case 33:
+question="NOT EXISTS Marines";
+sql="NOT EXISTS";
+result=[{NotExists:!database.some(r=>r.force==="Marines")}];
+break;
+
+case 34:
+question="Total salary";
+sql="SUM(salary)";
+result=[{Sum:database.reduce((s,r)=>s+r.salary,0)}];
+break;
+
+case 35:
+question="Group by force count";
+sql="GROUP BY force";
+let groups={};
+database.forEach(r=>{
+groups[r.force]=(groups[r.force]||0)+1;
+});
+result=Object.keys(groups).map(k=>({force:k,count:groups[k]}));
+break;
+
+case 36:
+question="Order by name";
+sql="ORDER BY name";
+result=[...database].sort((a,b)=>a.name.localeCompare(b.name));
+break;
+
+case 37:
+question="Top salary";
+sql="LIMIT 1";
+result=[[...database].sort((a,b)=>b.salary-a.salary)[0]];
+break;
+
+case 38:
+question="Youngest soldier";
+sql="MIN(age)";
+result=[[...database].sort((a,b)=>a.age-b.age)[0]];
+break;
+
+case 39:
+question="Oldest soldier";
+sql="MAX(age)";
+result=[[...database].sort((a,b)=>b.age-a.age)[0]];
+break;
+
+case 40:
+question="Salary increment 10%";
+sql="salary*1.1";
+result=database.map(r=>({name:r.name,newSalary:r.salary*1.1}));
+break;
+case 41:
+question="Display the first letter of each soldier name.";
+sql="SELECT SUBSTRING(name,1,1) AS Initial FROM soldiers;";
+result=database.map(r=>({name:r.name,initial:r.name[0]}));
+break;
+
+case 42:
+question="Display the soldier names in reverse format.";
+sql="SELECT REVERSE(name) FROM soldiers;";
+result=database.map(r=>({reverse:r.name.split('').reverse().join('')}));
+break;
+
+case 43:
+question="Display soldiers whose salary is greater than or equal to 70000.";
+sql="SELECT * FROM soldiers WHERE salary >= 70000;";
+result=database.filter(r=>r.salary>=70000);
+break;
+
+case 44:
+question="Display soldiers whose salary is less than or equal to 70000.";
+sql="SELECT * FROM soldiers WHERE salary <= 70000;";
+result=database.filter(r=>r.salary<=70000);
+break;
+
+case 45:
+question="Display double of each soldier salary.";
+sql="SELECT salary*2 AS DoubleSalary FROM soldiers;";
+result=database.map(r=>({double:r.salary*2}));
+break;
+
+case 46:
+question="Display half of each soldier salary.";
+sql="SELECT salary/2 AS HalfSalary FROM soldiers;";
+result=database.map(r=>({half:r.salary/2}));
+break;
+
+case 47:
+question="Display soldiers whose age is even.";
+sql="SELECT * FROM soldiers WHERE MOD(age,2)=0;";
+result=database.filter(r=>r.age%2===0);
+break;
+
+case 48:
+question="Display soldiers whose age is odd.";
+sql="SELECT * FROM soldiers WHERE MOD(age,2)=1;";
+result=database.filter(r=>r.age%2!==0);
+break;
+
+case 49:
+question="Display the ceiling value of salary divided by 10000.";
+sql="SELECT CEIL(salary/10000) FROM soldiers;";
+result=database.map(r=>({ceil:Math.ceil(r.salary/10000)}));
+break;
+
+case 50:
+question="Display the floor value of salary divided by 10000.";
+sql="SELECT FLOOR(salary/10000) FROM soldiers;";
+result=database.map(r=>({floor:Math.floor(r.salary/10000)}));
+break;
+
+case 51:
+question="Display the square root of each soldier salary.";
+sql="SELECT SQRT(salary) FROM soldiers;";
+result=database.map(r=>({sqrt:Math.sqrt(r.salary)}));
+break;
+
+case 52:
+question="Display the natural logarithm of each soldier salary.";
+sql="SELECT LOG(salary) FROM soldiers;";
+result=database.map(r=>({log:Math.log(r.salary)}));
+break;
+
+case 53:
+question="Display soldier name and rank combined.";
+sql="SELECT CONCAT(name,'-',rank) FROM soldiers;";
+result=database.map(r=>({concat:r.name+"-"+r.rank}));
+break;
+
+case 54:
+question="Display soldiers whose name ends with 'n'.";
+sql="SELECT * FROM soldiers WHERE name LIKE '%n';";
+result=database.filter(r=>r.name.endsWith("n"));
+break;
+
+case 55:
+question="Display trimmed soldier names.";
+sql="SELECT TRIM(name) FROM soldiers;";
+result=database.map(r=>({trim:r.name.trim()}));
+break;
+
+case 56:
+question="Display the current year.";
+sql="SELECT YEAR(CURDATE());";
+result=database.map(()=>({year:new Date().getFullYear()}));
+break;
+
+case 57:
+question="Display the current month.";
+sql="SELECT MONTH(CURDATE());";
+result=database.map(()=>({month:new Date().getMonth()+1}));
+break;
+
+case 58:
+question="Display the current day.";
+sql="SELECT DAY(CURDATE());";
+result=database.map(()=>({day:new Date().getDate()}));
+break;
+
+case 59:
+question="Display first two soldiers.";
+sql="SELECT * FROM soldiers LIMIT 2;";
+result=database.slice(0,2);
+break;
+
+case 60:
+question="Display soldiers using OFFSET.";
+sql="SELECT * FROM soldiers LIMIT 2 OFFSET 1;";
+result=database.slice(1,3);
+break;
+
+case 61:
+question="Display ranks in uppercase.";
+sql="SELECT UPPER(rank) FROM soldiers;";
+result=database.map(r=>({upper:r.rank.toUpperCase()}));
+break;
+
+case 62:
+question="Display ranks in lowercase.";
+sql="SELECT LOWER(rank) FROM soldiers;";
+result=database.map(r=>({lower:r.rank.toLowerCase()}));
+break;
+
+case 63:
+question="Display soldiers whose salary is not equal to 70000.";
+sql="SELECT * FROM soldiers WHERE salary != 70000;";
+result=database.filter(r=>r.salary!=70000);
+break;
+
+case 64:
+question="Display soldiers whose salary equals 70000.";
+sql="SELECT * FROM soldiers WHERE salary = 70000;";
+result=database.filter(r=>r.salary==70000);
+break;
+
+case 65:
+question="Display age increased by 10.";
+sql="SELECT age+10 FROM soldiers;";
+result=database.map(r=>({age10:r.age+10}));
+break;
+
+case 66:
+question="Display age decreased by 5.";
+sql="SELECT age-5 FROM soldiers;";
+result=database.map(r=>({age5:r.age-5}));
+break;
+
+case 67:
+question="Display salary in thousands.";
+sql="SELECT salary/1000 FROM soldiers;";
+result=database.map(r=>({salaryk:r.salary/1000}));
+break;
+
+case 68:
+question="Display soldiers whose name length is greater than 4.";
+sql="SELECT * FROM soldiers WHERE LENGTH(name)>4;";
+result=database.filter(r=>r.name.length>4);
+break;
+
+case 69:
+question="Display soldiers whose name length is less than or equal to 4.";
+sql="SELECT * FROM soldiers WHERE LENGTH(name)<=4;";
+result=database.filter(r=>r.name.length<=4);
+break;
+
+case 70:
+question="Display number of characters in each soldier name.";
+sql="SELECT LENGTH(name) FROM soldiers;";
+result=database.map(r=>({charcount:r.name.length}));
+break;
+
+case 71:
+question="Replace letter 'a' with '*' in names.";
+sql="SELECT REPLACE(name,'a','*') FROM soldiers;";
+result=database.map(r=>({replace:r.name.replace("a","*")}));
+break;
+
+case 72:
+question="Display first three characters of names.";
+sql="SELECT SUBSTRING(name,1,3) FROM soldiers;";
+result=database.map(r=>({substr:r.name.substring(0,3)}));
+break;
+
+case 73:
+question="Display repeated names.";
+sql="SELECT CONCAT(name,name) FROM soldiers;";
+result=database.map(r=>({repeat:r.name+r.name}));
+break;
+
+case 74:
+question="Display soldiers with salary >50000 AND age >30.";
+sql="SELECT * FROM soldiers WHERE salary>50000 AND age>30;";
+result=database.filter(r=>r.salary>50000 && r.age>30);
+break;
+
+case 75:
+question="Display soldiers with salary >50000 OR age <30.";
+sql="SELECT * FROM soldiers WHERE salary>50000 OR age<30;";
+result=database.filter(r=>r.salary>50000 || r.age<30);
+break;
+
+case 76:
+question="Display soldiers whose salary is NOT greater than 50000.";
+sql="SELECT * FROM soldiers WHERE NOT salary>50000;";
+result=database.filter(r=>!(r.salary>50000));
+break;
+
+case 77:
+question="Display salary category using CASE.";
+sql="SELECT name,CASE WHEN salary>70000 THEN 'High' ELSE 'Low' END FROM soldiers;";
+result=database.map(r=>({name:r.name,category:r.salary>70000?"High":"Low"}));
+break;
+
+case 78:
+question="Display salary percentage based on 100000.";
+sql="SELECT salary/100000*100 FROM soldiers;";
+result=database.map(r=>({percent:r.salary/100000*100}));
+break;
+
+case 79:
+question="Generate random number for each soldier.";
+sql="SELECT RAND() FROM soldiers;";
+result=database.map(()=>({random:Math.random()}));
+break;
+
+case 80:
+question="Display exponential value.";
+sql="SELECT EXP(1);";
+result=database.map(()=>({exp:Math.exp(1)}));
+break;
+
+case 81:
+question="Display value of PI.";
+sql="SELECT PI();";
+result=database.map(()=>({pi:Math.PI}));
+break;
+
+case 82:
+question="Display sign of salary difference from 70000.";
+sql="SELECT SIGN(salary-70000) FROM soldiers;";
+result=database.map(r=>({sign:Math.sign(r.salary-70000)}));
+break;
+
+case 83:
+question="Display tangent of soldier age.";
+sql="SELECT TAN(age) FROM soldiers;";
+result=database.map(r=>({tan:Math.tan(r.age)}));
+break;
+
+case 84:
+question="Display cosine of soldier age.";
+sql="SELECT COS(age) FROM soldiers;";
+result=database.map(r=>({cos:Math.cos(r.age)}));
+break;
+
+case 85:
+question="Display sine of soldier age.";
+sql="SELECT SIN(age) FROM soldiers;";
+result=database.map(r=>({sin:Math.sin(r.age)}));
+break;
+
+case 86:
+question="Display rounded salary value.";
+sql="SELECT ROUND(salary/1000) FROM soldiers;";
+result=database.map(r=>({round:Math.round(r.salary/1000)}));
+break;
+
+case 87:
+question="Display truncated salary value.";
+sql="SELECT TRUNCATE(salary/1000,0) FROM soldiers;";
+result=database.map(r=>({truncate:parseInt(r.salary/1000)}));
+break;
+
+case 88:
+question="Display square of salary.";
+sql="SELECT POWER(salary,2) FROM soldiers;";
+result=database.map(r=>({pow:Math.pow(r.salary,2)}));
+break;
+
+case 89:
+question="Display cube of salary.";
+sql="SELECT POWER(salary,3) FROM soldiers;";
+result=database.map(r=>({cube:Math.pow(r.salary,3)}));
+break;
+
+case 90:
+question="Display absolute difference between age and 30.";
+sql="SELECT ABS(age-30) FROM soldiers;";
+result=database.map(r=>({ageabs:Math.abs(r.age-30)}));
+break;
+
+case 91:
+question="Display ceiling value of age divided by 3.";
+sql="SELECT CEIL(age/3) FROM soldiers;";
+result=database.map(r=>({ageceil:Math.ceil(r.age/3)}));
+break;
+
+case 92:
+question="Display floor value of age divided by 3.";
+sql="SELECT FLOOR(age/3) FROM soldiers;";
+result=database.map(r=>({agefloor:Math.floor(r.age/3)}));
+break;
+
+case 93:
+question="Display square root of age.";
+sql="SELECT SQRT(age) FROM soldiers;";
+result=database.map(r=>({agesqrt:Math.sqrt(r.age)}));
+break;
+
+case 94:
+question="Display logarithm of age.";
+sql="SELECT LOG(age) FROM soldiers;";
+result=database.map(r=>({agelog:Math.log(r.age)}));
+break;
+
+case 95:
+question="Display reversed age digits.";
+sql="SELECT REVERSE(age) FROM soldiers;";
+result=database.map(r=>({agerev:String(r.age).split('').reverse().join('')}));
+break;
+
+case 96:
+question="Display padded age value.";
+sql="SELECT LPAD(age,4,'0') FROM soldiers;";
+result=database.map(r=>({agepad:"00"+r.age}));
+break;
+
+case 97:
+question="Convert age to string format.";
+sql="SELECT CAST(age AS CHAR) FROM soldiers;";
+result=database.map(r=>({agestr:String(r.age)}));
+break;
+
+case 98:
+question="Concatenate soldier name and age.";
+sql="SELECT CONCAT(name,age) FROM soldiers;";
+result=database.map(r=>({ageconcat:r.name+r.age}));
+break;
+
+case 99:
+question="Display age incremented by 1.";
+sql="SELECT age+1 FROM soldiers;";
+result=database.map(r=>({ageinc:r.age+1}));
+break;
+
+case 100:
+question="Display age decremented by 1.";
+sql="SELECT age-1 FROM soldiers;";
+result=database.map(r=>({agedec:r.age-1}));
+break;
+}
+
+document.getElementById("questionDisplay").innerHTML="Question: "+question;
+document.getElementById("queryDisplay").innerHTML="Executed Query: "+sql;
+
+displayTable(result);
+
+}
+function displayTable(data) {
+
+    if (data.length === 0) {
+        document.getElementById("output").innerHTML =
+        "<p>No Records Found</p>";
+        return;
+    }
+
+    let table = "<table><tr>";
+
+    for (let key in data[0]) {
+        table += "<th>" + key + "</th>";
+    }
+    table += "</tr>";
+
+    data.forEach(row => {
+        table += "<tr>";
+        for (let key in row) {
+            table += "<td>" + row[key] + "</td>";
+        }
+        table += "</tr>";
+    });
+
+    table += "</table>";
+
+    document.getElementById("output").innerHTML = table;
+}
+
+</script>
+
+</body>
+</html>
